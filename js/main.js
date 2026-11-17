@@ -390,3 +390,5 @@ if ('IntersectionObserver' in window && revealElements.length) {
   window.addEventListener('beforeunload', () => { try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {} stopMusic(false); });
   updateUI();
 })();
+
+// Language translation is handled by js/translate.js
