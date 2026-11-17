@@ -740,6 +740,10 @@ html[data-theme="dark"] .site-footer { background: #2a1715; }
 .resource-card .tag { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--link); font-weight: 600; }
 .resource-card h3 { margin: 0; font-size: 1.3rem; }
 .resource-card p { margin: 0; font-size: 0.98rem; }
+.resource-card--wide { grid-column: 1 / -1; }
+.limbs-grid { list-style: none; padding: 0; margin: 18px 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.limbs-grid li { margin: 0; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--saffron); border-radius: 12px; padding: 14px 16px; font-size: 0.93rem; line-height: 1.55; color: var(--text-muted); }
+.limbs-grid li strong { font-family: var(--serif); font-size: 1.12rem; color: var(--heading); }
 .callout { background: rgba(161,32,32,0.08); border: 1px solid rgba(161,32,32,0.22); border-radius: 16px; padding: 18px 20px; color: var(--text-muted); }
 .callout strong { color: var(--heading); }
 .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
@@ -756,6 +760,7 @@ html[data-theme="dark"] .site-footer { background: #2a1715; }
 @media (max-width: 980px) {
   .hero-grid, .split, .schedule-grid, .teacher-grid, .session-layout, .benefit-grid, .testimonial-grid, .resource-grid, .membership-fees-grid { grid-template-columns: 1fr; }
   .practice-grid, .mini-grid, .session-mode-grid { grid-template-columns: repeat(2, 1fr); }
+  .limbs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-visual { min-height: 320px; }
   .hero-photo { height: 360px; }
   .teacher-photo { min-height: 420px; }
@@ -775,6 +780,7 @@ html[data-theme="dark"] .site-footer { background: #2a1715; }
   .header-inner { position: relative; }
   .header-actions { margin-left: auto; }
   .form-grid, .practice-grid, .benefit-grid, .testimonial-grid, .resource-grid, .mini-grid, .session-mode-grid { grid-template-columns: 1fr; }
+  .limbs-grid { grid-template-columns: 1fr; }
   .timeline li { grid-template-columns: 1fr; gap: 4px; }
   .footer-grid { grid-template-columns: 1fr; }
   .gallery-item.span-6, .gallery-item.span-4, .gallery-item.span-3 { grid-column: span 12; }
