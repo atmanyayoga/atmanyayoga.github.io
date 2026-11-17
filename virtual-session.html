@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5-Minute Virtual Yoga Practice | Ātmanya Yoga</title>
+  <meta name="description" content="A guided 5-minute virtual yoga and breathing practice with calming music and voice guidance. Practice anytime with Ātmanya Yoga.">
+  <link rel="icon" type="image/jpeg" href="assets/brand/atmanya-yoga-logo-2.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem("atmanya-theme");var d=t||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",d);}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="quote-ribbon" aria-label="Yoga quotes">
+  <div class="quote-ribbon__track">
+    <span><i>&#10022;</i> "Yoga is the journey of the self, through the self, to the self." &mdash; Bhagavad Gita</span>
+    <span><i>&#10022;</i> "Yoga is the stilling of the changing states of the mind." &mdash; Patanjali</span>
+    <span><i>&#10022;</i> "The mind is everything. What you think, you become." &mdash; Buddha</span>
+    <span><i>&#10022;</i> "Peace comes from within. Do not seek it without." &mdash; Buddha</span>
+    <span><i>&#10022;</i> "Breathe in calm, breathe out tension."</span>
+    <span><i>&#10022;</i> "Practise with patience; the results will follow in time." &mdash; Patanjali</span>
+    <span><i>&#10022;</i> "Yoga is the journey of the self, through the self, to the self." &mdash; Bhagavad Gita</span>
+    <span><i>&#10022;</i> "Yoga is the stilling of the changing states of the mind." &mdash; Patanjali</span>
+    <span><i>&#10022;</i> "The mind is everything. What you think, you become." &mdash; Buddha</span>
+    <span><i>&#10022;</i> "Peace comes from within. Do not seek it without." &mdash; Buddha</span>
+    <span><i>&#10022;</i> "Breathe in calm, breathe out tension."</span>
+    <span><i>&#10022;</i> "Practise with patience; the results will follow in time." &mdash; Patanjali</span>
+  </div>
+</div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand" aria-label="Home"><img src="assets/brand/atmanya-yoga-logo-clear.png" alt="Atmanya Yoga" class="brand-logo"></a>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="teacher.html">Meet the Teacher</a>
+        <a href="courses.html">Classes</a>
+        <a href="membership.html">Membership</a>
+        <a href="virtual-session.html" class="active">5-Min Practice</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">🌙</button>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow">Virtual Session</span>
+        <h1>5-Minute Guided Yoga Practice</h1>
+        <p>A short, calming practice with guided voice cues for breathing and gentle movement, accompanied by soothing background music. Find a comfortable seat, press start, and allow yourself to move toward stillness.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="session-layout">
+          <div class="session-player card" id="sessionPlayer">
+            <div class="session-mode-grid" role="group" aria-label="Practice modes">
+              <button type="button" class="mode-btn active" data-mode="calm">Calm Breath</button>
+              <button type="button" class="mode-btn" data-mode="morning">Morning Ease</button>
+              <button type="button" class="mode-btn" data-mode="evening">Evening Unwind</button>
+            </div>
+            <p class="mode-desc" id="sessionModeDesc">A calming 5-minute practice with slow breathing and gentle stillness.</p>
+            <div class="session-visual" aria-hidden="true">
+              <div class="session-breath-ring" id="breathRing"></div>
+              <div class="session-orb">
+                <img src="assets/brand/trishul-transparent.png" alt="Atmanya Yoga Trishul" class="session-orb-logo">
+              </div>
+            </div>
+            <div class="session-status">
+              <p class="session-phase-label">Current phase</p>
+              <h2 id="sessionPhase">Ready to begin</h2>
+              <p id="sessionCue" class="session-cue">Press Start to begin your 5-minute guided practice with voice guidance and calming music.</p>
+            </div>
+            <div class="session-timer-wrap">
+              <div class="session-timer" id="sessionTimer">05:00</div>
+              <div class="session-progress" aria-label="Session progress"><span id="sessionProgressBar"></span></div>
+              <p class="session-time-note"><span id="sessionElapsed">0:00</span> elapsed · 5:00 total</p>
+            </div>
+            <div class="session-controls">
+              <button type="button" class="btn btn--primary" id="sessionStart">Start Practice</button>
+              <button type="button" class="btn btn--outline" id="sessionPause" disabled>Pause</button>
+              <button type="button" class="btn btn--outline" id="sessionReset">Reset</button>
+            </div>
+            <div class="session-toggles">
+              <label class="session-toggle"><input type="checkbox" id="voiceToggle" checked> Voice guidance</label>
+              <label class="session-toggle"><input type="checkbox" id="musicToggle" checked> Background music</label>
+            </div>
+            <p class="session-note">Tip: For the best experience, use speakers or headphones. Voice guidance uses your device's speech feature if available. Background music is generated softly in your browser.</p>
+          </div>
+
+          <div class="session-side">
+            <div class="card-soft">
+              <span class="eyebrow">What to expect</span>
+              <h3 style="margin-top: 10px;">Choose your 5-minute practice</h3>
+              <ul class="check-list" style="margin-top: 14px;">
+                <li><strong>Calm Breath:</strong> Slow breathing, gentle release, and stillness for balance.</li>
+                <li><strong>Morning Ease:</strong> Awakening breath, light movement, and focus to start the day.</li>
+                <li><strong>Evening Unwind:</strong> Soothing breath and gentle release to relax and settle.</li>
+                <li>Each mode includes <strong>voice guidance</strong> and <strong>calming background music</strong> (toggle anytime).</li>
+              </ul>
+            </div>
+            <div class="card" style="margin-top: 22px;">
+              <span class="eyebrow">Before you begin</span>
+              <ul class="info-list" style="margin-top: 12px; font-size: 1rem;">
+                <li>Sit comfortably on a mat or chair with your spine upright.</li>
+                <li>Keep your shoulders relaxed and your jaw soft.</li>
+                <li>Breathe gently and stay within a comfortable range.</li>
+                <li>If you feel discomfort, ease out of the movement and return to natural breathing.</li>
+              </ul>
+              <p style="margin-top: 14px;">This short practice is for general wellbeing and is not a substitute for medical advice. Please practise within your own capacity.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark">
+      <div class="container">
+        <div class="cta-box">
+          <span class="eyebrow" style="color: var(--gold);">Continue Your Journey</span>
+          <h2 style="margin-top: 14px;">Join live traditional Hatha Yoga classes</h2>
+          <p>Experience deeper guidance in asana, pranayama, dharana and relaxation with Ātmanya Yoga.</p>
+          <div class="hero-actions" style="justify-content: center; margin-top: 24px;">
+            <a href="courses.html" class="btn btn--light">Explore Classes</a>
+            <a href="contact.html" class="btn btn--outline" style="color: #fffaf0; border-color: rgba(246,239,227,0.4);">Contact &amp; Registration</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><img src="assets/brand/atmanya-yoga-logo-clear.png" alt="Atmanya Yoga" class="brand-logo brand-logo--footer"></div>
+          <p style="color: rgba(246,239,227,0.85);">Movement to Stillness.</p>
+          <p>Traditional Hatha Yoga | Asana | Pranayama | Dharana</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="teacher.html">Meet the Teacher</a></li>
+            <li><a href="courses.html">Classes</a></li>
+            <li><a href="membership.html">Membership</a></li>
+            <li><a href="virtual-session.html">5-Min Practice</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms-conditions.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="social-links">
+          <a class="social-link" href="https://www.instagram.com/atmanya_yoga?srtk=a21jdXFrNmxhMHBm&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a class="social-link" href="https://www.facebook.com/share/1AS5yruxhL/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a>
+        </div>
+        <p>Email: <a href="mailto:[INSERT OFFICIAL EMAIL]">[INSERT OFFICIAL EMAIL]</a></p>
+        <p class="footer-copy">&copy; <span id="year"></span> Ātmanya Yoga. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+</body>
+</html>
