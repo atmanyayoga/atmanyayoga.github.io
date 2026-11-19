@@ -240,7 +240,10 @@ if ('IntersectionObserver' in window && revealElements.length) {
     if (lang !== 'en' && t && t.translateText) {
       try { spoken = await t.translateText(text, lang); } catch (_) {}
       if (token !== speakToken) return;
-      if (el) el.textContent = spoken;
+      if (el) {
+        el.setAttribute('data-i18n-original', text);
+        el.textContent = spoken;
+      }
     }
 
     try {
