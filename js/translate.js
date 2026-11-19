@@ -309,7 +309,8 @@
     if (busy) return;
     if (LANGS.indexOf(lang) === -1) lang = 'en';
     currentLang = lang;
-    try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
+    try { sessionStorage.setItem(LANG_KEY, lang); } catch (_) {}
+    try { localStorage.removeItem(LANG_KEY); } catch (_) {}
     document.documentElement.lang = lang;
 
     collect(document.body);
@@ -348,7 +349,8 @@
     const select = document.getElementById('langSelect');
     if (!select) return;
     let saved = 'en';
-    try { saved = localStorage.getItem(LANG_KEY) || 'en'; } catch (_) {}
+    try { saved = sessionStorage.getItem(LANG_KEY) || 'en'; } catch (_) {}
+    try { localStorage.removeItem(LANG_KEY); } catch (_) {}
     if (LANGS.indexOf(saved) === -1) saved = 'en';
     select.value = saved;
     currentLang = saved;
