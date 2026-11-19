@@ -115,6 +115,8 @@ if ('IntersectionObserver' in window && revealElements.length) {
   const breathRing = document.getElementById('breathRing');
   const modeDesc = document.getElementById('sessionModeDesc');
   const modeBtns = Array.from(document.querySelectorAll('.mode-btn'));
+  const langSelect = document.getElementById('langSelect');
+  let speakToken = 0;
 
   const TOTAL = 300; // seconds
   const modes = {
@@ -222,12 +224,35 @@ if ('IntersectionObserver' in window && revealElements.length) {
     if (state) breathRing.classList.add(state);
   }
 
-  function speak(text) {
+  function cancelSpeech() {
+    speakToken += 1;
+    try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {}
+  }
+
+  async function speak(text, el) {
+    const token = ++speakToken;
     if (!voiceToggle || !voiceToggle.checked) return;
     if (!('speechSynthesis' in window)) return;
+
+    const t = window.AtmanyaTranslate;
+    const lang = t && t.getLang ? t.getLang() : 'en';
+    let spoken = text;
+    if (lang !== 'en' && t && t.translateText) {
+      try { spoken = await t.translateText(text, lang); } catch (_) {}
+      if (token !== speakToken) return;
+      if (el) el.textContent = spoken;
+    }
+
     try {
       window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
+      const u = new SpeechSynthesisUtterance(spoken);
+      u.lang = t && t.getVoiceLang ? t.getVoiceLang() : 'en-US';
+      const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+      const wanted = u.lang.toLowerCase().replace('_', '-');
+      const prefix = wanted.slice(0, 2);
+      const voice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === wanted) ||
+                    voices.find(v => v.lang && v.lang.toLowerCase().indexOf(prefix) === 0);
+      if (voice) u.voice = voice;
       u.rate = 0.92;
       u.pitch = 1;
       u.volume = 1;
@@ -292,7 +317,7 @@ if ('IntersectionObserver' in window && revealElements.length) {
     if (phaseEl) phaseEl.textContent = c.phase;
     if (cueEl) cueEl.textContent = c.text;
     setBreath(c.breath);
-    speak(c.text);
+    speak(c.text, cueEl);
   }
 
   function updateUI() {
@@ -345,7 +370,7 @@ if ('IntersectionObserver' in window && revealElements.length) {
     if (startBtn) startBtn.disabled = false;
     if (pauseBtn) pauseBtn.textContent = 'Resume';
     if (startBtn) startBtn.textContent = 'Resume';
-    try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {}
+    cancelSpeech();
     stopMusic(true);
   }
 
@@ -361,7 +386,7 @@ if ('IntersectionObserver' in window && revealElements.length) {
     if (cueEl) cueEl.textContent = 'Press Start to begin your 5-minute guided practice with voice guidance and calming music.';
     if (startBtn) { startBtn.disabled = false; startBtn.textContent = 'Start Practice'; }
     if (pauseBtn) { pauseBtn.disabled = true; pauseBtn.textContent = 'Pause'; }
-    try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {}
+    cancelSpeech();
     stopMusic(false);
   }
 
@@ -384,10 +409,11 @@ if ('IntersectionObserver' in window && revealElements.length) {
     else if (running) startMusic();
   });
   if (voiceToggle) voiceToggle.addEventListener('change', () => {
-    if (!voiceToggle.checked) { try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {} }
+    if (!voiceToggle.checked) cancelSpeech();
   });
+  if (langSelect) langSelect.addEventListener('change', cancelSpeech);
 
-  window.addEventListener('beforeunload', () => { try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {} stopMusic(false); });
+  window.addEventListener('beforeunload', () => { cancelSpeech(); stopMusic(false); });
   updateUI();
 })();
 

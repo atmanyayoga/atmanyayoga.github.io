@@ -1,8 +1,10 @@
 // Site-wide translation (English / Hindi / French)
 (function () {
   const LANGS = ['en', 'hi', 'fr'];
+  const VOICE_LANG = { en: 'en-US', hi: 'hi-IN', fr: 'fr-FR' };
   const SEP = '|||';
   const CHUNK = 20;
+  const CONCURRENCY = 5;
   const API = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=';
   const CACHE_PREFIX = 'atmanya-i18n-';
   const LANG_KEY = 'atmanya-lang';
@@ -10,7 +12,9 @@
 
   let currentLang = 'en';
   let nodes = [];
+  let nodeSet = new Set();
   let busy = false;
+  const inflight = new Map();
 
   function storageGet(key) {
     try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch (_) { return {}; }
@@ -20,8 +24,15 @@
   }
   function getDict(lang) { return storageGet(CACHE_PREFIX + lang); }
   function saveDict(lang, dict) { storageSet(CACHE_PREFIX + lang, dict); }
-
   function clean(text) { return (text || '').trim(); }
+
+  function remember(node) {
+    if (!node || nodeSet.has(node)) return false;
+    nodeSet.add(node);
+    if (node.__atmanyaOriginal === undefined) node.__atmanyaOriginal = node.nodeValue;
+    nodes.push(node);
+    return true;
+  }
 
   function collect(root) {
     const found = [];
@@ -36,9 +47,7 @@
       }
     });
     while (walker.nextNode()) {
-      const node = walker.currentNode;
-      if (node.__atmanyaOriginal === undefined) node.__atmanyaOriginal = node.nodeValue;
-      found.push(node);
+      if (remember(walker.currentNode)) found.push(walker.currentNode);
     }
     return found;
   }
@@ -53,32 +62,70 @@
     return parts.length === texts.length ? parts : null;
   }
 
+  async function fetchOne(text, lang) {
+    try {
+      const result = await translateBatch([text], lang);
+      if (result && result[0]) return result[0];
+    } catch (_) {}
+    return text;
+  }
+
+  async function translateText(text, lang) {
+    const value = clean(text);
+    if (!value) return text;
+    lang = LANGS.indexOf(lang) !== -1 ? lang : currentLang;
+    if (lang === 'en') return text;
+
+    const dict = getDict(lang);
+    if (dict[value]) return text.replace(value, dict[value]);
+
+    const key = lang + '\u0000' + value;
+    if (inflight.has(key)) return inflight.get(key);
+
+    const task = (async function () {
+      const translated = await fetchOne(value, lang);
+      const fresh = getDict(lang);
+      fresh[value] = translated;
+      saveDict(lang, fresh);
+      return text.replace(value, translated);
+    })();
+
+    inflight.set(key, task);
+    try { return await task; } finally { inflight.delete(key); }
+  }
+
   async function ensureDictionary(lang, texts) {
     const dict = getDict(lang);
     const missing = [];
     texts.forEach(function (text) {
-      if (!dict[text] && missing.indexOf(text) === -1) missing.push(text);
+      if (text && !dict[text] && missing.indexOf(text) === -1) missing.push(text);
     });
     if (!missing.length) return dict;
 
-    for (let i = 0; i < missing.length; i += CHUNK) {
-      const chunk = missing.slice(i, i + CHUNK);
-      let translated = null;
-      try {
-        translated = await translateBatch(chunk, lang);
-      } catch (_) {}
-      if (translated) {
-        chunk.forEach(function (text, index) { dict[text] = translated[index]; });
-      } else {
-        for (const text of chunk) {
-          try {
-            const single = await translateBatch([text], lang);
-            if (single && single[0]) dict[text] = single[0];
-          } catch (_) {}
+    const chunks = [];
+    for (let i = 0; i < missing.length; i += CHUNK) chunks.push(missing.slice(i, i + CHUNK));
+
+    let cursor = 0;
+    async function worker() {
+      while (cursor < chunks.length) {
+        const chunk = chunks[cursor++];
+        try {
+          const translated = await translateBatch(chunk, lang);
+          if (translated && translated.length === chunk.length) {
+            chunk.forEach(function (text, index) { dict[text] = translated[index]; });
+          } else {
+            const singles = await Promise.all(chunk.map(function (text) { return fetchOne(text, lang); }));
+            chunk.forEach(function (text, index) { dict[text] = singles[index]; });
+          }
+        } catch (_) {
+          const singles = await Promise.all(chunk.map(function (text) { return fetchOne(text, lang); }));
+          chunk.forEach(function (text, index) { dict[text] = singles[index]; });
         }
+        saveDict(lang, dict);
+        applyDictionary(dict); // show each completed batch immediately
       }
-      saveDict(lang, dict);
     }
+    await Promise.all(Array.from({ length: Math.min(CONCURRENCY, chunks.length) }, worker));
     return dict;
   }
 
@@ -112,6 +159,7 @@
     if (LANGS.indexOf(lang) === -1) lang = 'en';
     currentLang = lang;
     try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
+    document.documentElement.lang = lang;
 
     if (!nodes.length) nodes = collect(document.body);
     if (lang === 'en') {
@@ -143,18 +191,24 @@
     if (LANGS.indexOf(saved) === -1) saved = 'en';
     select.value = saved;
     currentLang = saved;
+    document.documentElement.lang = saved;
     select.addEventListener('change', function () { switchTo(this.value); });
 
-    // Re-translate content injected later (e.g. guided session cues).
+    // Translate content injected later (e.g. guided session cues) without a full page walk.
     if (window.MutationObserver) {
-      const observer = new MutationObserver(function () {
+      const observer = new MutationObserver(function (records) {
         if (busy || currentLang === 'en') return;
-        const added = collect(document.body);
-        if (added.length > nodes.length) {
-          nodes = added;
-          const dict = getDict(currentLang);
-          applyDictionary(dict);
-        }
+        let changed = false;
+        records.forEach(function (record) {
+          record.addedNodes.forEach(function (added) {
+            if (added.nodeType === 3) {
+              if (remember(added)) changed = true;
+            } else if (added.nodeType === 1) {
+              if (collect(added).length) changed = true;
+            }
+          });
+        });
+        if (changed) applyDictionary(getDict(currentLang));
       });
       observer.observe(document.body, { childList: true, subtree: true });
     }
@@ -162,7 +216,13 @@
     if (saved !== 'en') switchTo(saved);
   }
 
-  window.AtmanyaTranslate = { init: init, switchTo: switchTo };
+  window.AtmanyaTranslate = {
+    init: init,
+    switchTo: switchTo,
+    getLang: function () { return currentLang; },
+    getVoiceLang: function () { return VOICE_LANG[currentLang] || 'en-US'; },
+    translateText: translateText
+  };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
