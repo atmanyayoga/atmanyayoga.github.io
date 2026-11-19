@@ -335,8 +335,8 @@
 
     const texts = allTexts();
     const dict = getDict(lang);
-    const missingTotal = texts.filter(function (text) { return text && !dict[text]; }).length;
-    if (missingTotal) showOverlay(lang, missingTotal);
+    // Translations are bundled, so switching is instant — never show a blocking popup.
+    hideOverlay(true);
 
     busy = true;
     setStatus('Translating...');
@@ -359,6 +359,7 @@
 
   function init() {
     const select = document.getElementById('langSelect');
+    hideOverlay(true);
     if (!select) return;
     let saved = 'en';
     try { saved = sessionStorage.getItem(LANG_KEY) || 'en'; } catch (_) {}
