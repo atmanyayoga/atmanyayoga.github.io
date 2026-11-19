@@ -28,8 +28,20 @@
   function storageSet(key, value) {
     try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
   }
-  function getDict(lang) { return storageGet(CACHE_PREFIX + lang); }
-  function saveDict(lang, dict) { storageSet(CACHE_PREFIX + lang, dict); }
+  function staticDict(lang) {
+    return (window.ATMANYA_I18N && window.ATMANYA_I18N[lang]) || {};
+  }
+  function getDict(lang) {
+    return Object.assign({}, staticDict(lang), storageGet(CACHE_PREFIX + lang));
+  }
+  function saveDict(lang, dict) {
+    const base = staticDict(lang);
+    const overrides = {};
+    Object.keys(dict).forEach(function (key) {
+      if (base[key] !== dict[key]) overrides[key] = dict[key];
+    });
+    storageSet(CACHE_PREFIX + lang, overrides);
+  }
   function clean(text) { return (text || '').trim(); }
   function skipText(text) {
     return !text || /^\[(INSERT|UPLOAD)/.test(text);
