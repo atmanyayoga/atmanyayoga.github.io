@@ -28,7 +28,7 @@
     form.querySelector('[data-label=message]').textContent = t('emailMessage', 'Your message');
     Array.from(document.querySelectorAll('.email-trigger')).forEach(function (el) {
       const label = t('emailBtn', 'Email');
-      el.textContent = label;
+      if (!el.querySelector('svg')) el.textContent = label;
       el.title = label;
     });
   }
