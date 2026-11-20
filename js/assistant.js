@@ -284,10 +284,10 @@
     avatar = document.createElement('button');
     avatar.type = 'button';
     avatar.className = 'hasanti-avatar';
-    avatar.setAttribute('aria-label', t('assistantName', 'Hasanti'));
+    avatar.setAttribute('aria-label', t('assistantAsk', 'Ask Hasanti'));
     avatar.innerHTML = '<span class="hw-shadow"></span>' +
       '<img class="hw-image" src="assets/brand/hasanti-cutout.png" alt="Hasanti">' +
-      '<span class="hasanti-name">Hasanti</span>';
+      '<span class="hasanti-name">' + t('assistantAsk', 'Ask Hasanti') + '</span>';
     avatar.addEventListener('click', function () {
       if (bubble.hidden) intro(); else hideBubble();
     });
@@ -300,9 +300,9 @@
     if (select) {
       select.addEventListener('change', function () {
         setTimeout(function () {
-          avatar.setAttribute('aria-label', t('assistantName', 'Hasanti'));
+          avatar.setAttribute('aria-label', t('assistantAsk', 'Ask Hasanti'));
           const nameEl = avatar.querySelector('.hasanti-name');
-          if (nameEl) nameEl.textContent = t('assistantName', 'Hasanti');
+          if (nameEl) nameEl.textContent = t('assistantAsk', 'Ask Hasanti');
           if (chatActive) {
             addQuickReplies();
             renderChat();
