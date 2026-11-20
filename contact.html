@@ -85,11 +85,9 @@
               <input type="text" id="country" name="country" required>
             </div>
             <div class="field">
-              <label for="region">Preferred region <span class="required">*</span></label>
-              <select id="region" name="region" required>
-                <option value="">Select region</option>
-                <option>India</option>
-                <option>Europe</option>
+              <label for="timezone">Time zone <span class="required">*</span></label>
+              <select id="timezone" name="timezone" required>
+                <option value="">Select time zone</option>
               </select>
             </div>
             <div class="field field--full">
@@ -168,7 +166,7 @@
           <div class="card">
             <ul class="info-list" style="font-size: 1.05rem;">
               <li><strong>Email:</strong> <button type="button" class="social-link email-trigger" data-email-form aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm0 2v.4l9 6.2 9-6.2V7H3zm18 10V9.8l-8.4 5.8a1 1 0 0 1-1.2 0L3 9.8V17h18z"/></svg></button></li>
-              <li><strong>Location:</strong> Online classes | India and Europe</li>
+              <li><strong>Location:</strong> Online classes | All time zones</li>
               <li><strong>Response:</strong> We aim to respond by email as soon as possible with the relevant details.</li>
             </ul>
             <div class="social-links" style="margin-top: 18px;">
@@ -179,7 +177,7 @@
           <div class="card-soft" style="margin-top: 20px;">
             <h3>What happens next?</h3>
             <ul class="check-list" style="margin-top: 12px;">
-              <li>We review your enquiry and preferred batch/region.</li>
+              <li>We review your enquiry, preferred batch and time zone.</li>
               <li>You receive class, trial or registration details by email.</li>
               <li>For registration, payment instructions are shared (UPI details provided by email).</li>
               <li>After confirmation, you receive enrolment and Google Meet class details.</li>
@@ -203,7 +201,7 @@
           </div>
           <div class="faq-list" style="margin-top: 20px;">
             <details class="faq-item"><summary>Can I request a free trial first?</summary><div class="faq-body"><p>Yes. Select “Trial class” in the form above. You may attend one free trial class before enrolling in a membership.</p></div></details>
-            <details class="faq-item"><summary>Are batch timings confirmed?</summary><div class="faq-body"><p>Batch timings are currently listed as “To be confirmed”. Submit an enquiry with your region and level to receive current availability.</p></div></details>
+            <details class="faq-item"><summary>Are batch timings confirmed?</summary><div class="faq-body"><p>Batch timings are currently listed as “To be confirmed”. Submit an enquiry with your time zone and level to receive current availability.</p></div></details>
             <details class="faq-item"><summary>How will I receive payment details?</summary><div class="faq-body"><p>At present, payment can be made through UPI, and payment details will be shared with you by email after registration. UPI ID and QR code are listed on the <a href="membership.html">Membership</a> page as placeholders ([INSERT UPI ID], [UPLOAD QR CODE]) until provided.</p></div></details>
           </div>
         </div>
@@ -249,10 +247,10 @@
       </div>
     </div>
   </footer>
-    <script src="js/i18n-data.js?v=11"></script>
+    <script src="js/i18n-data.js?v=12"></script>
   <script src="js/translate.js?v=10"></script>
   <script src="js/assistant.js?v=10"></script>
   <script src="js/email-form.js?v=3"></script>
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=12"></script>
 </body>
 </html>

@@ -77,7 +77,7 @@ if (enquiryForm && formConfirmation) {
       'Full name: ' + value('fullName'),
       'Email: ' + value('email'),
       'Country: ' + value('country'),
-      'Preferred region: ' + value('region'),
+      'Time zone: ' + value('timezone'),
       'Type of enquiry: ' + type,
       'Preferred batch: ' + value('batch'),
       'Experience level: ' + value('experience'),
@@ -99,6 +99,34 @@ if (enquiryForm && formConfirmation) {
     } catch (_) {}
     formConfirmation.classList.add('show');
     enquiryForm.reset();
+  });
+}
+
+// Populate the time-zone selector with all IANA time zones available in the browser.
+const timezoneSelect = document.getElementById('timezone');
+if (timezoneSelect) {
+  const fallbackZones = [
+    'Asia/Kolkata', 'Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo', 'Asia/Shanghai', 'Asia/Hong_Kong',
+    'Asia/Seoul', 'Asia/Bangkok', 'Asia/Jakarta', 'Asia/Manila', 'Asia/Karachi', 'Asia/Dhaka',
+    'Europe/London', 'Europe/Dublin', 'Europe/Lisbon', 'Europe/Madrid', 'Europe/Paris', 'Europe/Berlin',
+    'Europe/Rome', 'Europe/Amsterdam', 'Europe/Brussels', 'Europe/Zurich', 'Europe/Vienna', 'Europe/Warsaw',
+    'Europe/Prague', 'Europe/Budapest', 'Europe/Athens', 'Europe/Istanbul', 'Europe/Moscow', 'Europe/Kyiv',
+    'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'America/Toronto',
+    'America/Vancouver', 'America/Mexico_City', 'America/Sao_Paulo', 'America/Argentina/Buenos_Aires',
+    'Australia/Sydney', 'Australia/Melbourne', 'Australia/Brisbane', 'Australia/Perth',
+    'Africa/Cairo', 'Africa/Lagos', 'Africa/Johannesburg', 'Pacific/Auckland', 'Pacific/Honolulu'
+  ];
+  let zones = fallbackZones;
+  try {
+    if (typeof Intl !== 'undefined' && typeof Intl.supportedValuesOf === 'function') {
+      zones = Intl.supportedValuesOf('timeZone');
+    }
+  } catch (_) {}
+  zones.forEach(function (zone) {
+    const option = document.createElement('option');
+    option.value = zone;
+    option.textContent = zone.replace(/_/g, ' ');
+    timezoneSelect.appendChild(option);
   });
 }
 
