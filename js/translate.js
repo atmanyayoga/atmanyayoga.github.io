@@ -11,7 +11,7 @@
   const LANG_KEY = 'atmanya-lang';
   const OVERLAY_ID = 'atmanya-translate-overlay';
   const ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
-  const SKIP = 'script, style, noscript, .lang-select, .goog-te-gadget, #' + OVERLAY_ID;
+  const SKIP = 'script, style, noscript, .lang-select, .goog-te-gadget, #' + OVERLAY_ID + ', .chatbot';
 
   let currentLang = 'en';
   let nodes = [];
