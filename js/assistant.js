@@ -121,12 +121,8 @@
     avatar.type = 'button';
     avatar.className = 'hasanti-avatar';
     avatar.setAttribute('aria-label', t('assistantName', 'Hasanti'));
-    avatar.innerHTML = '<span class="hw-arm hw-arm--left"></span>' +
-      '<span class="hw-arm hw-arm--right"></span>' +
-      '<span class="hw-leg hw-leg--left"></span>' +
-      '<span class="hw-leg hw-leg--right"></span>' +
-      '<span class="hw-body"></span>' +
-      '<span class="hw-head"></span>' +
+    avatar.innerHTML = '<span class="hw-shadow"></span>' +
+      '<img class="hw-image" src="assets/brand/hasanti-cutout.png" alt="Hasanti">' +
       '<span class="hasanti-name">Hasanti</span>';
     avatar.addEventListener('click', function () {
       if (bubble.hidden) greet(); else hideBubble();
