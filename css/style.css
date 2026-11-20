@@ -846,7 +846,7 @@ html[data-theme="dark"] .site-footer { background: #2a1715; }
 .email-modal__form button { margin-top: 4px; }
 
 /* Hasanti virtual guide */
-.hasanti { position: fixed; left: 0; bottom: 0; z-index: 8800; display: flex; flex-direction: column; align-items: center; animation: hasanti-walk 30s ease-in-out infinite; }
+.hasanti { position: fixed; right: 18px; bottom: 0; z-index: 8800; display: flex; flex-direction: column; align-items: center; }
 .hasanti:hover { animation-play-state: paused; }
 @keyframes hasanti-walk { 0%, 100% { transform: translateX(18px); } 50% { transform: translateX(calc(100vw - 300px)); } }
 @keyframes hasanti-walk-mobile { 0%, 100% { transform: translateX(12px); } 50% { transform: translateX(calc(100vw - 180px)); } }
@@ -856,14 +856,14 @@ html[data-theme="dark"] .site-footer { background: #2a1715; }
 .hasanti-name { position: absolute; z-index: 5; top: -18px; left: 50%; transform: translateX(-50%); font-family: var(--sans); font-size: .68rem; font-weight: 700; color: var(--heading); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
 @keyframes hasanti-bob { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-5px) rotate(1deg); } }
 @keyframes hasanti-shadow { 0%, 100% { transform: translateX(-50%) scaleX(1); opacity: .22; } 50% { transform: translateX(-50%) scaleX(.8); opacity: .14; } }
-.hasanti-bubble { position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%); width: 280px; max-height: 62vh; overflow-y: auto; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 16px; padding: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.28); }
+.hasanti-bubble { position: absolute; bottom: 150px; right: 0; width: 280px; max-height: 62vh; overflow-y: auto; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 16px; padding: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.28); }
 .hasanti-bubble[hidden] { display: none; }
 .hasanti-bubble-text { margin: 0 0 10px; font-size: .85rem; line-height: 1.5; }
 .hasanti-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 .hasanti-btn { border: 1px solid var(--border); background: var(--bg-alt); color: var(--heading); border-radius: 999px; padding: 6px 10px; font-size: .74rem; font-family: var(--sans); font-weight: 600; cursor: pointer; }
 .hasanti-btn:hover { border-color: var(--saffron); color: var(--link); }
 .hasanti-highlight { outline: 3px solid rgba(200,163,90,.85) !important; outline-offset: 4px; border-radius: 12px; }
-@media (max-width: 760px) { .hasanti { animation-name: hasanti-walk-mobile; } .hasanti-avatar { transform: scale(.86); transform-origin: bottom center; } .hasanti-bubble { width: min(270px, calc(100vw - 30px)); } }
+@media (max-width: 760px) { .hasanti { right: 10px; } .hasanti-avatar { transform: scale(.86); transform-origin: bottom center; } .hasanti-bubble { width: min(270px, calc(100vw - 30px)); } }
 
 /* Hasanti inline chat */
 .hasanti-chat { margin-top: 10px; }

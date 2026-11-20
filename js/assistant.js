@@ -1,4 +1,4 @@
-// Hasanti — walking guide with built-in instant Q&A and selectable website tours
+// Haasanthi — walking guide with built-in instant Q&A and selectable website tours
 (function () {
   'use strict';
 
@@ -154,7 +154,7 @@
 
   function startChat() {
     chatActive = true;
-    bubbleText.textContent = t('title', 'Ask Hasanti');
+    bubbleText.textContent = t('title', 'Ask Haasanthi');
     actions.hidden = true;
     chat.hidden = false;
     bubble.hidden = false;
@@ -163,7 +163,7 @@
       addQuickReplies();
     }
     renderChat();
-    chatInput.placeholder = t('inputPlaceholder', 'Ask Hasanti...');
+    chatInput.placeholder = t('inputPlaceholder', 'Ask Haasanthi...');
     chatInput.focus();
     rerender = startChat;
   }
@@ -261,13 +261,13 @@
   }
 
   function intro() {
-    showBubble(t('assistantIntro', "Namaste! I'm Hasanti, your guide here."), [
+    showBubble(t('assistantIntro', "Namaste! I'm Haasanthi, your guide here."), [
       { label: t('navTour', 'Website tour'), handler: function () { startTour('full'); } },
       { label: t('navClasses', 'Classes'), handler: function () { goPage('courses.html', '.timeline'); } },
       { label: t('navFees', 'Fees & membership'), handler: function () { goPage('membership.html', '.membership-fees-grid'); } },
       { label: t('navPractice', '5-minute practice'), handler: function () { goPage('virtual-session.html', '.session-player'); } },
       { label: t('navContact', 'Contact & register'), handler: function () { goPage('contact.html', '#enquiryForm'); } },
-      { label: t('assistantAsk', 'Ask Hasanti'), handler: startChat },
+      { label: t('assistantAsk', 'Ask Haasanthi'), handler: startChat },
       { label: t('tourLater', 'Maybe later'), handler: hideBubble }
     ], intro);
   }
@@ -323,10 +323,10 @@
     avatar = document.createElement('button');
     avatar.type = 'button';
     avatar.className = 'hasanti-avatar';
-    avatar.setAttribute('aria-label', t('assistantAsk', 'Ask Hasanti'));
+    avatar.setAttribute('aria-label', t('assistantAsk', 'Ask Haasanthi'));
     avatar.innerHTML = '<span class="hw-shadow"></span>' +
-      '<img class="hw-image" src="assets/brand/hasanti-cutout.png" alt="Hasanti">' +
-      '<span class="hasanti-name">' + t('assistantAsk', 'Ask Hasanti') + '</span>';
+      '<img class="hw-image" src="assets/brand/hasanti-cutout.png" alt="Haasanthi">' +
+      '<span class="hasanti-name">' + t('assistantAsk', 'Ask Haasanthi') + '</span>';
     avatar.addEventListener('click', function () {
       if (bubble.hidden) intro(); else hideBubble();
     });
@@ -353,9 +353,9 @@
     if (select) {
       select.addEventListener('change', function () {
         setTimeout(function () {
-          avatar.setAttribute('aria-label', t('assistantAsk', 'Ask Hasanti'));
+          avatar.setAttribute('aria-label', t('assistantAsk', 'Ask Haasanthi'));
           const nameEl = avatar.querySelector('.hasanti-name');
-          if (nameEl) nameEl.textContent = t('assistantAsk', 'Ask Hasanti');
+          if (nameEl) nameEl.textContent = t('assistantAsk', 'Ask Haasanthi');
           if (chatActive) {
             addQuickReplies();
             renderChat();

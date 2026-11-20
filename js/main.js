@@ -254,6 +254,32 @@ if ('IntersectionObserver' in window && revealElements.length) {
     if (state) breathRing.classList.add(state);
   }
 
+  const FEMALE_VOICE_HINTS = /female|woman|zira|samantha|victoria|karen|moira|tessa|susan|linda|amelie|celine|claire|audrey|chantal|valerie|virginie|kalpana|veena|meera|kavya|anushka|ritu|geeta|sushma|swara|neha|divya|nisha|priya/i;
+  let cachedVoices = [];
+
+  function refreshVoices() {
+    cachedVoices = ('speechSynthesis' in window && window.speechSynthesis.getVoices) ? window.speechSynthesis.getVoices() : [];
+  }
+  if ('speechSynthesis' in window) {
+    refreshVoices();
+    if (window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', refreshVoices);
+  }
+
+  function pickFemaleVoice(locale) {
+    refreshVoices();
+    const target = (locale || '').toLowerCase().replace('_', '-');
+    const prefix = target.slice(0, 2);
+    const matches = cachedVoices.filter(function (v) {
+      if (!v.lang) return false;
+      const l = v.lang.toLowerCase().replace('_', '-');
+      return l === target || l.indexOf(prefix) === 0;
+    });
+    const female = matches.find(function (v) {
+      return (v.gender && v.gender.toLowerCase() === 'female') || FEMALE_VOICE_HINTS.test(v.name || '');
+    });
+    return female || matches[0] || null;
+  }
+
   function cancelSpeech() {
     speakToken += 1;
     try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {}
@@ -280,14 +306,11 @@ if ('IntersectionObserver' in window && revealElements.length) {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(spoken);
       u.lang = t && t.getVoiceLang ? t.getVoiceLang() : 'en-US';
-      const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
-      const wanted = u.lang.toLowerCase().replace('_', '-');
-      const prefix = wanted.slice(0, 2);
-      const voice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === wanted) ||
-                    voices.find(v => v.lang && v.lang.toLowerCase().indexOf(prefix) === 0);
+      const voice = pickFemaleVoice(u.lang);
       if (voice) u.voice = voice;
+      const isFemale = !!(voice && ((voice.gender && voice.gender.toLowerCase() === 'female') || FEMALE_VOICE_HINTS.test(voice.name || '')));
       u.rate = 0.92;
-      u.pitch = 1;
+      u.pitch = isFemale ? 1 : 1.12;
       u.volume = 1;
       window.speechSynthesis.speak(u);
     } catch (_) {}
