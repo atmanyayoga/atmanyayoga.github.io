@@ -67,6 +67,36 @@ const formConfirmation = document.getElementById('formConfirmation') || document
 if (enquiryForm && formConfirmation) {
   enquiryForm.addEventListener('submit', (event) => {
     event.preventDefault();
+    if (!enquiryForm.reportValidity()) return;
+
+    const data = new FormData(enquiryForm);
+    const value = (key) => (data.get(key) || '').toString().trim();
+    const type = value('enquiryType') || 'General enquiry';
+    const subject = 'Ātmanya Yoga — ' + type + (value('register') === 'Yes' ? ' (Registration)' : '');
+    const body = [
+      'Full name: ' + value('fullName'),
+      'Email: ' + value('email'),
+      'Country: ' + value('country'),
+      'Preferred region: ' + value('region'),
+      'Type of enquiry: ' + type,
+      'Preferred batch: ' + value('batch'),
+      'Experience level: ' + value('experience'),
+      'Would like to register: ' + value('register'),
+      'Subscription duration: ' + value('subscription'),
+      'Preferred start date: ' + value('startDate'),
+      '',
+      'Message:',
+      value('message') || '-'
+    ].join('\n');
+
+    window.location.href = 'mailto:atmanyayoga@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+    try {
+      const lang = (window.AtmanyaTranslate && window.AtmanyaTranslate.getLang && window.AtmanyaTranslate.getLang()) || 'en';
+      const i18n = window.ATMANYA_I18N || {};
+      const note = (i18n[lang] && i18n[lang].formMailtoNote) || (i18n.en && i18n.en.formMailtoNote) || 'Your email app has opened with your details ready to send.';
+      formConfirmation.textContent = note;
+    } catch (_) {}
     formConfirmation.classList.add('show');
     enquiryForm.reset();
   });
