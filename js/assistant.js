@@ -19,6 +19,38 @@
     return (i18n[lang()] && i18n[lang()][key]) || (i18n.en && i18n.en[key]) || fallback || key;
   }
 
+  const PAGE_FOR = {
+    '.timeline': 'courses.html',
+    '.membership-fees-grid': 'membership.html',
+    '.session-player': 'virtual-session.html',
+    '#enquiryForm': 'contact.html',
+    '.resource-grid': 'resources.html',
+    '.gallery-grid': 'teacher.html',
+    '.teacher-grid': 'teacher.html'
+  };
+
+  function pageName() {
+    return location.pathname.split('/').pop() || 'index.html';
+  }
+
+  function scrollToTarget(selector) {
+    const el = document.querySelector(selector);
+    if (el && el.scrollIntoView) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      highlight(el);
+    }
+    return el;
+  }
+
+  function goPage(page, selector) {
+    if (pageName() === page) {
+      scrollToTarget(selector);
+      return;
+    }
+    try { sessionStorage.setItem('hasanti_target', selector || ''); } catch (_) {}
+    window.location.href = page;
+  }
+
   function button(label, handler, cls) {
     const b = document.createElement('button');
     b.type = 'button';
@@ -183,15 +215,15 @@
     const extras = getExtras();
     if (mode === 'classesFees') {
       return start.concat([
-        { selector: '.timeline, .practice-grid', key: 'tourSchedule' },
-        { selector: '.membership-fees-grid, .benefit-grid, .faq-list', key: 'tourFees' },
+        { selector: '.timeline', key: 'tourSchedule' },
+        { selector: '.membership-fees-grid', key: 'tourFees' },
         footer
       ]);
     }
     if (mode === 'practice') {
       return start.concat([
-        { selector: '.session-player, .practice-grid', key: 'tourSession' },
-        { selector: '.session-side, .benefit-grid', key: 'tourBenefits' },
+        { selector: '.session-player', key: 'tourSession' },
+        { selector: '.session-side', key: 'tourBenefits' },
         footer
       ]);
     }
@@ -201,6 +233,11 @@
   function renderStep(steps, index) {
     const current = steps[index];
     let target = document.querySelector(current.selector);
+    if (!target && PAGE_FOR[current.selector]) {
+      try { sessionStorage.setItem('hasanti_tour', JSON.stringify({ steps: steps, index: index })); } catch (_) {}
+      window.location.href = PAGE_FOR[current.selector];
+      return;
+    }
     if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     highlight(target);
     showBubble(t(current.key, ''), [
@@ -225,9 +262,11 @@
 
   function intro() {
     showBubble(t('assistantIntro', "Namaste! I'm Hasanti, your guide here."), [
-      { label: t('tourFull', 'Full website tour'), handler: function () { startTour('full'); } },
-      { label: t('tourClassesFees', 'Classes & fees'), handler: function () { startTour('classesFees'); } },
-      { label: t('tourPracticeOpt', '5-minute practice'), handler: function () { startTour('practice'); } },
+      { label: t('navTour', 'Website tour'), handler: function () { startTour('full'); } },
+      { label: t('navClasses', 'Classes'), handler: function () { goPage('courses.html', '.timeline'); } },
+      { label: t('navFees', 'Fees & membership'), handler: function () { goPage('membership.html', '.membership-fees-grid'); } },
+      { label: t('navPractice', '5-minute practice'), handler: function () { goPage('virtual-session.html', '.session-player'); } },
+      { label: t('navContact', 'Contact & register'), handler: function () { goPage('contact.html', '#enquiryForm'); } },
       { label: t('assistantAsk', 'Ask Hasanti'), handler: startChat },
       { label: t('tourLater', 'Maybe later'), handler: hideBubble }
     ], intro);
@@ -295,6 +334,20 @@
     root.appendChild(bubble);
     root.appendChild(avatar);
     document.body.appendChild(root);
+
+    try {
+      const pendingTarget = sessionStorage.getItem('hasanti_target');
+      if (pendingTarget) {
+        sessionStorage.removeItem('hasanti_target');
+        setTimeout(function () { scrollToTarget(pendingTarget); }, 700);
+      }
+      const pendingTour = sessionStorage.getItem('hasanti_tour');
+      if (pendingTour) {
+        sessionStorage.removeItem('hasanti_tour');
+        const saved = JSON.parse(pendingTour);
+        if (saved && saved.steps) setTimeout(function () { renderStep(saved.steps, saved.index || 0); }, 800);
+      }
+    } catch (_) {}
 
     const select = document.getElementById('langSelect');
     if (select) {
