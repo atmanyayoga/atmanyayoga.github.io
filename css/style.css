@@ -874,3 +874,21 @@ html[data-theme="dark"] .site-footer { background: #2a1715; }
 .email-modal__form input, .email-modal__form textarea { width: 100%; font-family: var(--sans); font-size: .95rem; padding: 11px 13px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--input-bg); color: var(--text); }
 .email-modal__form textarea { resize: vertical; }
 .email-modal__form button { margin-top: 4px; }
+
+/* Hasanti virtual guide */
+.hasanti { position: fixed; left: 0; bottom: 0; z-index: 8800; display: flex; flex-direction: column; align-items: center; animation: hasanti-walk 30s ease-in-out infinite; }
+.hasanti:hover { animation-play-state: paused; }
+@keyframes hasanti-walk { 0%, 100% { transform: translateX(18px); } 50% { transform: translateX(calc(100vw - 300px)); } }
+@keyframes hasanti-walk-mobile { 0%, 100% { transform: translateX(12px); } 50% { transform: translateX(calc(100vw - 180px)); } }
+.hasanti-avatar { position: relative; width: 62px; height: 62px; padding: 0; border-radius: 50%; border: 2px solid #c8a35a; background: var(--surface); box-shadow: 0 8px 24px rgba(0,0,0,.28); cursor: pointer; animation: hasanti-bob 1.4s ease-in-out infinite; }
+.hasanti-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: center 18%; display: block; }
+.hasanti-name { position: absolute; left: 50%; bottom: -20px; transform: translateX(-50%); font-family: var(--sans); font-size: .68rem; font-weight: 700; color: var(--heading); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+@keyframes hasanti-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.hasanti-bubble { position: absolute; bottom: 88px; left: 50%; transform: translateX(-50%); width: 270px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 16px; padding: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.28); }
+.hasanti-bubble[hidden] { display: none; }
+.hasanti-bubble-text { margin: 0 0 10px; font-size: .85rem; line-height: 1.5; }
+.hasanti-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.hasanti-btn { border: 1px solid var(--border); background: var(--bg-alt); color: var(--heading); border-radius: 999px; padding: 6px 10px; font-size: .74rem; font-family: var(--sans); font-weight: 600; cursor: pointer; }
+.hasanti-btn:hover { border-color: var(--saffron); color: var(--link); }
+.hasanti-highlight { outline: 3px solid rgba(200,163,90,.85) !important; outline-offset: 4px; border-radius: 12px; }
+@media (max-width: 760px) { .hasanti { animation-name: hasanti-walk-mobile; } .hasanti-avatar { width: 54px; height: 54px; } .hasanti-bubble { width: min(270px, calc(100vw - 30px)); } }

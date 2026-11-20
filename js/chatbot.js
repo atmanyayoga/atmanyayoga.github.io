@@ -203,6 +203,14 @@
     }
   }
 
+  window.AtmanyaChat = {
+    open: function () { setOpen(true); },
+    ask: function (question) {
+      setOpen(true);
+      ask(question);
+    }
+  };
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);
   else build();
 })();
