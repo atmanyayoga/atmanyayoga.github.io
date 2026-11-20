@@ -27,7 +27,9 @@
     form.querySelector('[data-label=subject]').textContent = t('emailSubject', 'Subject');
     form.querySelector('[data-label=message]').textContent = t('emailMessage', 'Your message');
     Array.from(document.querySelectorAll('.email-trigger')).forEach(function (el) {
-      el.title = t('emailBtn', 'Email Us');
+      const label = t('emailBtn', 'Email');
+      el.textContent = label;
+      el.title = label;
     });
   }
 
