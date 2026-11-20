@@ -102,7 +102,7 @@ if (enquiryForm && formConfirmation) {
   });
 }
 
-// Populate the time-zone selector with all IANA time zones available in the browser.
+// Populate the time-zone selector with country + city labels and flags.
 const timezoneSelect = document.getElementById('timezone');
 if (timezoneSelect) {
   const fallbackZones = [
@@ -122,12 +122,35 @@ if (timezoneSelect) {
       zones = Intl.supportedValuesOf('timeZone');
     }
   } catch (_) {}
-  zones.forEach(function (zone) {
-    const option = document.createElement('option');
-    option.value = zone;
-    option.textContent = zone.replace(/_/g, ' ');
-    timezoneSelect.appendChild(option);
-  });
+
+  const countryMap = (window.ATMANYA_TZ_COUNTRY && typeof window.ATMANYA_TZ_COUNTRY === 'object') ? window.ATMANYA_TZ_COUNTRY : {};
+  let regionNames = null;
+  try {
+    if (typeof Intl !== 'undefined' && Intl.DisplayNames) regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+  } catch (_) {}
+
+  function flagEmoji(code) {
+    if (!code || !/^[A-Z]{2}$/.test(code)) return '';
+    return String.fromCodePoint.apply(null, code.split('').map(function (c) { return 127397 + c.charCodeAt(0); }));
+  }
+
+  function zoneLabel(zone) {
+    const aliases = window.ATMANYA_TZ_ALIAS || {};
+    const code = countryMap[zone] || aliases[zone] || '';
+    const country = (regionNames && code) ? (regionNames.of(code) || code) : (code || 'Global');
+    const city = zone.split('/').pop().replace(/_/g, ' ');
+    const flag = flagEmoji(code);
+    return (flag ? flag + ' ' : '') + country + ' — ' + city;
+  }
+
+  zones.map(function (zone) { return { zone: zone, label: zoneLabel(zone) }; })
+    .sort(function (a, b) { return a.label.localeCompare(b.label); })
+    .forEach(function (item) {
+      const option = document.createElement('option');
+      option.value = item.zone;
+      option.textContent = item.label;
+      timezoneSelect.appendChild(option);
+    });
 }
 
 // Scroll reveal for main content blocks
