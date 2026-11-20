@@ -110,7 +110,8 @@
     panel.hidden = !open;
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     toggle.setAttribute('aria-label', open ? t('close') : t('open'));
-    toggle.textContent = open ? '✕' : 'ॐ';
+    toggle.innerHTML = '<span class="chat-toggle-icon">' + (open ? '✕' : 'ॐ') + '</span>' +
+      '<span class="chat-toggle-label">' + t('title') + '</span>';
     if (open) {
       render();
       if (input) input.focus();
@@ -129,7 +130,8 @@
     toggle.className = 'chat-toggle';
     toggle.setAttribute('aria-label', t('open'));
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = 'ॐ';
+    toggle.innerHTML = '<span class="chat-toggle-icon">ॐ</span>' +
+      '<span class="chat-toggle-label">' + t('title') + '</span>';
 
     panel = document.createElement('section');
     panel.className = 'chat-panel';
