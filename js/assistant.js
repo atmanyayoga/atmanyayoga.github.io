@@ -121,8 +121,7 @@
     avatar.type = 'button';
     avatar.className = 'hasanti-avatar';
     avatar.setAttribute('aria-label', t('assistantName', 'Hasanti'));
-    avatar.innerHTML = '<span class="hw-hair"></span>' +
-      '<span class="hw-arm hw-arm--left"></span>' +
+    avatar.innerHTML = '<span class="hw-arm hw-arm--left"></span>' +
       '<span class="hw-arm hw-arm--right"></span>' +
       '<span class="hw-leg hw-leg--left"></span>' +
       '<span class="hw-leg hw-leg--right"></span>' +
